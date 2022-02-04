@@ -3,6 +3,7 @@ import * as Google from 'expo-google-app-auth';
 import MainPage from './MainPage/FlatlistUI';
 import React from 'react';
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 import {IP_ADD} from '@env'
 
@@ -11,7 +12,13 @@ export default class LoginPage extends React.Component {
     super(props)
     this.state = {signedIn: false, name: "", photoUrl: "",email:""}
     this.HandleClick=this.HandleClick.bind(this);
-    }
+    this.saveToken = this.saveToken.bind(this);
+  }
+
+  saveToken = async(key, value) => {
+    await SecureStore.setItemAsync(key, value)
+  }
+
     //Function to handle onPress.
      HandleClick = async() =>{
       try {
@@ -30,7 +37,7 @@ export default class LoginPage extends React.Component {
             googleId: id
           }
           axios.post(`${IP_ADD}/user/login`, data)
-            .then((response) => {
+            .then(async (response) => {
               if(response.data.success) {
                 this.setState({
                   signedIn: true,
@@ -38,6 +45,9 @@ export default class LoginPage extends React.Component {
                   name: name,
                   photoUrl: photoUrl
                 });
+
+                // Save token in local storage
+                this.saveToken("token", response.data.token);
               }
             })
         } else {
