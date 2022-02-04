@@ -2,6 +2,9 @@ import { StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native';
 import * as Google from 'expo-google-app-auth';
 import MainPage from './MainPage/FlatlistUI';
 import React from 'react';
+import axios from 'axios';
+
+import {IP_ADD} from '@env'
 
 export default class LoginPage extends React.Component {
   constructor(props) {
@@ -16,13 +19,27 @@ export default class LoginPage extends React.Component {
           androidClientId: "819068882370-ug04p1qchq01hsqn57q36vshm26i1doe.apps.googleusercontent.com",
           scopes: ["profile", "email"]
         })
+        console.log("Result.user", result.user)
         if (result.type === "success") {
-          this.setState({
-            signedIn: true,
-            email:result.user.email,
-            name: result.user.name,
-            photoUrl: result.user.photoUrl
-          });
+          const { id, email, givenName, familyName, photoUrl, name } = result.user;
+          const data = {
+            email,
+            firstName: givenName,
+            lastName: familyName,
+            avatar: photoUrl,
+            googleId: id
+          }
+          axios.post(`${IP_ADD}/user/login`, data)
+            .then((response) => {
+              if(response.data.success) {
+                this.setState({
+                  signedIn: true,
+                  email:email,
+                  name: name,
+                  photoUrl: photoUrl
+                });
+              }
+            })
         } else {
           console.log("cancelled")
         }
