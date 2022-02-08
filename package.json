@@ -9,6 +9,7 @@
     "web": "expo start --web",
     "eject": "expo eject"
   },
+  "author": "Hardik & Vignesh",
   "dependencies": {
     "axios": "^0.25.0",
     "expo": "~44.0.0",
