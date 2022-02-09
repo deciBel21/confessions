@@ -1,19 +1,26 @@
-import { View, Text, Image,StyleSheet,TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable } from 'react-native';
+
+import ConfessForm from '../../ConfessForm';
 //This is just a demo for the Main Page UI 
 const  MainPage = (props) => {
+  const [ modalVisible, setModalVisible ] = useState(false);
+  const handleModalVisibility = function(bool){
+    setModalVisible(bool);
+  }
   return (
     <View>
-    <Image style={styles.image} source={{ uri: props.photoUrl }}/>
-    <Text style={styles.header}>Stes Confessions</Text>
-    <TouchableOpacity
-      onPress={() => console.log("Add Form")}
-     >
-     <Image
-      style={styles.addButton}
-      source={require('../../../assets/add.png')}
-     />
-    </TouchableOpacity>
+      <Image style={styles.image} source={{ uri: props.photoUrl }}/>
+      <Text style={styles.header}>Stes Confessions</Text>
+      <TouchableOpacity
+        onPress={() => setModalVisible(!modalVisible)}
+        >
+        <Image
+          style={styles.addButton}
+          source={require('../../../assets/add.png')}
+        />
+      </TouchableOpacity>
+      <ConfessForm modalVisible={modalVisible} handleModalVisibility={handleModalVisibility} />
     </View>
   );
 }

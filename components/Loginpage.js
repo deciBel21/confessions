@@ -13,8 +13,8 @@ export default class LoginPage extends React.Component {
     this.state = {signedIn: false, name: "", photoUrl: "",email:""}
     this.HandleClick=this.HandleClick.bind(this);
     this.saveToken = this.saveToken.bind(this);
+    console.log(IP_ADD);
   }
-
   saveToken = async(key, value) => {
     await SecureStore.setItemAsync(key, value)
   }
