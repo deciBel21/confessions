@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable } from 'react-native';
 
+
 import ConfessForm from '../../ConfessForm';
 //This is just a demo for the Main Page UI 
 const  MainPage = (props) => {
   const [ modalVisible, setModalVisible ] = useState(false);
-  const handleModalVisibility = function(bool){
+  const handleModalVisibility = function(bool) {
     setModalVisible(bool);
   }
   return (
