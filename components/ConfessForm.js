@@ -16,7 +16,7 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
         }
         const token = await SecureStore.getItemAsync('token');
         console.log("TOKEN", token)
-        axios.post(`${IP_ADD}/user/confession`, data, { headers: { 'Authorization': `Bearer ${token}` } })
+        axios.post(`${IP_ADD}:8080/user/confession`, data, { headers: { 'Authorization': `Bearer ${token}` } })
             .then((res) => {
                 if(res.data.success) {
                     console.log(res.data.result);
