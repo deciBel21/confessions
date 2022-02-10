@@ -8,6 +8,7 @@ import { IP_ADD } from '@env';
 const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
     const [username, onChangeUsername] = React.useState(null);
     const [confession, onChangeConfession] = React.useState(null);
+    const [formError, setFormError] = React.useState(false);
 
     const handleSubmitClick = async function(bool) {
         const data = {
@@ -15,15 +16,24 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
             message: confession
         }
         const token = await SecureStore.getItemAsync('token');
-        console.log("TOKEN", token)
-        axios.post(`${IP_ADD}/user/confession`, data, { headers: { 'Authorization': `Bearer ${token}` } })
-            .then((res) => {
-                if(res.data.success) {
-                    console.log(res.data.result);
-                    handleModalVisibility(bool);
-                }
-            })
-            .catch((e) => console.log(e));
+        if(username && confession) {
+            axios.post(`${IP_ADD}:8080/user/confession`, data, { headers: { 'Authorization': `Bearer ${token}` } })
+                .then((res) => {
+                    if(res.data.success) {
+                        console.log(res.data.result);
+                        handleModalVisibility(bool);
+                    }
+                })
+                .catch((e) => console.log(e));
+        }
+        else {
+            setFormError(!formError)
+        }
+    }
+
+    const handleFormChange = function(type, value) {
+        setFormError(false);
+        type == "username" ? onChangeUsername(value) : onChangeConfession(value);
     }
 
     return (
@@ -42,17 +52,23 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
                             <Text style={styles.header}>Confess</Text>
                             <TextInput
                                 style={styles.input}
-                                onChangeText={onChangeUsername}
+                                onChangeText={(value) => handleFormChange("username", value)}
                                 value={username}
                                 placeholder="Username"
                             />
                             <TextInput
                                 style={styles.inputMultiline}
-                                onChangeText={onChangeConfession}
+                                onChangeText={(value) => handleFormChange("confession", value)}
                                 value={confession}
                                 placeholder="Confession"
                                 multiline={true}
                             />
+                            {   
+                                formError ? 
+                                <Text style={styles.formError}>Please enter username and confession to continue.</Text>
+                                :
+                                <React.Fragment />
+                            }
                         </SafeAreaView>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
@@ -138,6 +154,12 @@ const styles = StyleSheet.create({
     alignItems:'center',
     color:'black'
   },
+  formError:{
+    color:'red',
+    fontSize:15,
+    margin: 12,
+    marginTop: 8
+  }
 });
 
 export default ConfessForm;
