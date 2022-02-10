@@ -27,6 +27,7 @@ export default class LoginPage extends React.Component {
           scopes: ["profile", "email"]
         })
         console.log("Result.user", result.user)
+        console.log(IP_ADD)
         if (result.type === "success") {
           const { id, email, givenName, familyName, photoUrl, name } = result.user;
           const data = {
@@ -36,7 +37,7 @@ export default class LoginPage extends React.Component {
             avatar: photoUrl,
             googleId: id
           }
-          axios.post(`${IP_ADD}/user/login`, data)
+          axios.post(`${IP_ADD}:8080/user/login`, data)
             .then(async (response) => {
               if(response.data.success) {
                 this.setState({
