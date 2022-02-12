@@ -4,8 +4,7 @@ import MainPage from './MainPage/FlatlistUI';
 import React from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
-
-import {IP_ADD} from '@env'
+import {IP_ADD} from '@env';
 
 export default class LoginPage extends React.Component {
   constructor(props) {
@@ -65,7 +64,7 @@ export default class LoginPage extends React.Component {
       // User verfied => Land to main page.
       console.log(`User Loged In! with name: ${this.state.name} , email: ${this.state.email} and photoUrl: ${this.state.photoUrl  }`),
       //Navigate user to the Flast List for now the MainPage which is the UI component for the Flatlist.
-      <MainPage  name= {this.state.name} photoUrl={this.state.photoUrl}/>
+      <MainPage name= {this.state.name} photoUrl={this.state.photoUrl}/>
     ) : (
       //If not veified => loginPage.
       <View>
