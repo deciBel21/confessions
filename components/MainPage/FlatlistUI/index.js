@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable, FlatList,ScrollView } from 'react-native';
+import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable, FlatList,ScrollView, Dimensions } from 'react-native';
 import {Card} from 'react-native-shadow-cards';
 import ConfessForm from '../../ConfessForm';
 //This is just a demo for the Main Page UI 
@@ -36,35 +36,58 @@ const  MainPage = (props) => {
    getData();
   },[])
  
-  return (
-    <View style={{backgroundColor:'white'}}>
-      <ScrollView 
-      horizontal={false}
-      showsHorizontalScrollIndicator={false}>
-      <View>
-      <Image style={styles.image} source={{ uri: props.photoUrl }}/>
-      <Text style={styles.header}>Stes Confessions</Text>
+  // const renderItem = (data) =>{
+  //   return(
+  //     data.map((item, index) => (
+  //       <View style={{flex:1}} key={item._id}>
+  //       <Card style={{padding: 10, margin: 10, borderRadius:18, elevation:10,alignSelf:'center',backgroundColor:'white'}}>
+  //         <Text style={styles.date}>{item.createdAt}</Text>
+  //         <Text style={styles.UserName}>{item.username}</Text>
+  //         <Text style={styles.Confession}>{item.message}</Text>
+  //     </Card>
+  //       </View>)
+  //   )
+  //   )}
+
+  const Header = () =>{
+    return(
+      <View style={styles.headerFooterStyle}>
+        <Image style={styles.image} source={{ uri: props.photoUrl }}/>
+          <Text style={styles.header}>Stes Confessions</Text>
       </View>
-      {data.map((item, index) => (
-        <View style={{flex:1}} key={item._id}>
-        <Card style={{padding: 10, margin: 10, borderRadius:18, elevation:10,alignSelf:'center',backgroundColor:'white'}}>
-          <Text style={styles.date}>{item.createdAt}</Text>
-          <Text style={styles.UserName}>{item.username}</Text>
-          <Text style={styles.Confession}>{item.message}</Text>
+    )
+
+  }
+
+  const Footer = () => {
+    //View to set in Footer
+    return (
+      <View style={styles.headerFooterStyle}>
+        <Text>The End!</Text>
+      </View>
+    );
+  };
+ 
+  return (
+  <View style={{backgroundColor:'white'}}>
+    <View style={{padding:10}}>
+      <FlatList 
+      keyExtractor={(item, index) => 'key'+index}
+      data={data}
+      ListHeaderComponent={Header}
+      ListFooterComponent={Footer}
+      renderItem={({item}) =>
+      <View style={{flex:1}} key={item._id}>
+      <Card style={{padding: 10, margin: 10, borderRadius:18, elevation:10,alignSelf:'center',backgroundColor:'white'}}>
+        <Text style={styles.date}>{item.createdAt}</Text>
+        <Text style={styles.UserName}>{item.username}</Text>
+        <Text style={styles.Confession}>{item.message}</Text>
       </Card>
-        </View>
-        
-        
-  ))}
-    </ScrollView>
-    <TouchableOpacity 
-    onPress={() => setModalVisible(!modalVisible)}
-    >
-    <Image
-      style={styles.addButton}
-      source={require('../../../assets/add.png')}
-    />
-  </TouchableOpacity>
+    </View>
+      }
+      decelerationRate={'normal'}
+      />
+    </View>
       <ConfessForm modalVisible={modalVisible} handleModalVisibility={handleModalVisibility} />
     </View>
   );
@@ -73,26 +96,22 @@ const styles= StyleSheet.create({
     header: {
         alignSelf:'center',
         fontSize: 35,
-        marginTop:-42,
+        marginTop:-45,
         marginStart:25,
         fontWeight:'bold',
         alignItems:'center',
         color:'black'
     },
     image: {
-        alignContent:'center',
-        marginTop: 50,
-        marginStart:10,
-        width: 40,
-        height: 40,
+        width:45,
+        height:45,
+        marginTop:15,
         borderColor: "rgba(0,0,0,0.2)",
-        borderWidth: 3,
-        borderRadius: 150
+        borderRadius: 150,
     },
     addButton:{
       width:65,
-      marginStart:300,
-      height:55,
+      position:'absolute',
       alignContent:'center',
       borderRadius:100,
     },
@@ -107,6 +126,12 @@ const styles= StyleSheet.create({
     },
     date:{
       color:'#806d06'
-    }
+    },
+    headerFooterStyle: {
+      fontSize: 35,
+      marginTop:30,
+      fontWeight:'bold',
+      color:'black'
+    },
 })
 export default MainPage;
