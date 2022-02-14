@@ -87,14 +87,14 @@ const  MainPage = (props) => {
     <View style={{padding:10}}>
       <FlatList 
       keyExtractor={(item, index) => 'key'+index}
-      data={data}
+      data={data.reverse()}
       onRefresh={onRefresh}
       refreshing={isFetching}
       ListHeaderComponent={Header}
       showsVerticalScrollIndicator={false}
       ListFooterComponent={Footer}
       renderItem={({item}) =>
-      <View style={{flex:1}} key={item._id}>
+      <View style={{flex:1}}>
       <Card style={{padding: 10, margin: 10, borderRadius:18, elevation:10,alignSelf:'center',backgroundColor:'white'}}>
         <Text style={styles.date}>{item.createdAt}</Text>
         <Text style={styles.UserName}>{item.username}</Text>
