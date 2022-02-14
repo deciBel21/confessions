@@ -19,7 +19,7 @@ const  MainPage = (props) => {
       return fetch('http://192.168.29.183:8080/confession/confessions')
       .then((response) => response.json())
       .then((responseJson) => {
-        setData(responseJson.confessions)
+        setData(responseJson.confessions.reverse())
         setIsFetching(false);
       })
       .catch((e) => console.log(e))
@@ -87,7 +87,7 @@ const  MainPage = (props) => {
     <View style={{padding:10}}>
       <FlatList 
       keyExtractor={(item, index) => 'key'+index}
-      data={data.reverse()}
+      data={data}
       onRefresh={onRefresh}
       refreshing={isFetching}
       ListHeaderComponent={Header}
