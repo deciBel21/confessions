@@ -10,8 +10,8 @@ const  MainPage = (props) => {
     getData();
   }
   const [data, setData] =useState([]);
-  const [isLoading, setisLoading] =useState(false);
-  const [message, setMessage] = useState('');
+  const [isLoading, setisLoading]= useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   const getData = async() =>{
     try {
@@ -20,6 +20,7 @@ const  MainPage = (props) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setData(responseJson.confessions)
+        setIsFetching(false);
       })
       .catch((e) => console.log(e))
       
@@ -30,6 +31,11 @@ const  MainPage = (props) => {
   }
   console.log(data);
   const {values} = data
+
+  const onRefresh = () => {
+    setIsFetching(true);
+    getData();
+  };
 
   
   useEffect(() => {
@@ -53,7 +59,15 @@ const  MainPage = (props) => {
     return(
       <View style={styles.headerFooterStyle}>
         <Image style={styles.image} source={{ uri: props.photoUrl }}/>
-          <Text style={styles.header}>Stes Confessions</Text>
+          <Text style={styles.header}>Stes Confessions</Text>  
+          <TouchableOpacity 
+          onPress={() => setModalVisible(!modalVisible)}
+          >
+          <Image
+            style={styles.addButton}
+            source={require('../../../assets/add.png')}
+          />
+        </TouchableOpacity>
       </View>
     )
 
@@ -74,7 +88,10 @@ const  MainPage = (props) => {
       <FlatList 
       keyExtractor={(item, index) => 'key'+index}
       data={data}
+      onRefresh={onRefresh}
+      refreshing={isFetching}
       ListHeaderComponent={Header}
+      showsVerticalScrollIndicator={false}
       ListFooterComponent={Footer}
       renderItem={({item}) =>
       <View style={{flex:1}} key={item._id}>
@@ -110,11 +127,13 @@ const styles= StyleSheet.create({
         borderRadius: 150,
     },
     addButton:{
-      width:65,
-      position:'absolute',
+      alignSelf:'center',
+      position:'relative',
+      width:50,
+      height:50,
       alignContent:'center',
       borderRadius:100,
-    },
+    },  
     UserName:{
       color:'black',
       fontSize:27,
