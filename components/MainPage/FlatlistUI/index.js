@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable, FlatList,ScrollView, Dimensions } from 'react-native';
 import {Card} from 'react-native-shadow-cards';
 import ConfessForm from '../../ConfessForm';
+
+import { IP_ADD } from '@env';
+
 //This is just a demo for the Main Page UI 
 const  MainPage = (props) => {
   const [ modalVisible, setModalVisible ] = useState(false);
@@ -16,7 +19,7 @@ const  MainPage = (props) => {
   const getData = async() =>{
     try {
       setisLoading(true);
-      return fetch('http://192.168.29.183:8080/confession/confessions')
+      return fetch(`${IP_ADD}:8080/confession/confessions`)
       .then((response) => response.json())
       .then((responseJson) => {
         setData(responseJson.confessions.reverse())
@@ -29,7 +32,6 @@ const  MainPage = (props) => {
       console.log(error)
     }
   }
-  console.log(data);
   const {values} = data
 
   const onRefresh = () => {
