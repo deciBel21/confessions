@@ -83,7 +83,7 @@ const  MainPage = (props) => {
   };
  
   return (
-  <View style={{backgroundColor:'	#000000'}}>
+  <View style={{backgroundColor:'#000000'}}>
     <View style={{padding:10}}>
       <FlatList 
       keyExtractor={(item, index) => 'key'+index}
