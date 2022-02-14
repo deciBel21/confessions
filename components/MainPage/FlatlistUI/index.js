@@ -58,16 +58,12 @@ const  MainPage = (props) => {
   const Header = () =>{
     return(
       <View style={styles.headerFooterStyle}>
-        <Image style={styles.image} source={{ uri: props.photoUrl }}/>
-          <Text style={styles.header}>Stes Confessions</Text>  
-          <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => setModalVisible(!modalVisible)}
-          >
-          <Image
-            style={styles.addButton}
-            source={require('../../../assets/add.png')}
-          />
+        >
+          <Image style={styles.image} source={{ uri: props.photoUrl }}/>
         </TouchableOpacity>
+          <Text style={styles.header}>Stes Confessions</Text> 
       </View>
     )
 
