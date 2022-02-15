@@ -95,7 +95,7 @@ const  MainPage = (props) => {
       <View style={{flex:1,padding:1, elevation:10}}>
       <Card style={{padding: 11, margin: 10, borderRadius:25, elevation:10,alignSelf:'center',backgroundColor:'#404040'}}>
         <Text style={styles.date}>{item.createdAt}</Text>
-        <Text style={styles.UserName}>{item.username}</Text>
+        <Text style={styles.UserName}>{item.college}</Text>
         <Text style={styles.Confession}>{item.message}</Text>
       </Card>
     </View>

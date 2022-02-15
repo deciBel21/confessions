@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput } from "react-native";
+import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput, Picker } from "react-native";
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 import { IP_ADD } from '@env';
 
 const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
-    const [username, onChangeUsername] = React.useState(null);
+    const [college, onChangeCollege] = React.useState("SIT");
     const [confession, onChangeConfession] = React.useState(null);
     const [formError, setFormError] = React.useState(false);
 
     const handleSubmitClick = async function(bool) {
         const data = {
-            username,
+            college,
             message: confession
         }
         const token = await SecureStore.getItemAsync('token');
-        if(username && confession) {
+        if(college && confession) {
             axios.post(`${IP_ADD}:8080/user/confession`, data, { headers: { 'Authorization': `Bearer ${token}` } })
                 .then((res) => {
                     if(res.data.success) {
@@ -33,7 +33,7 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
 
     const handleFormChange = function(type, value) {
         setFormError(false);
-        type == "username" ? onChangeUsername(value) : onChangeConfession(value);
+        type == "college" ? onChangeCollege(value) : onChangeConfession(value);
     }
 
     return (
@@ -50,12 +50,17 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
                     <View style={styles.modalView}>
                         <SafeAreaView>
                             <Text style={styles.header}>Confess</Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(value) => handleFormChange("username", value)}
-                                value={username}
-                                placeholder="Username"
-                            />
+                            <View style={styles.collegePicker}>
+                              <Picker
+                                selectedValue={college}
+                                style={{ height: 50, width: "100%" }}
+                                mode='dropdown'
+                                onValueChange={(itemValue, itemIndex) => onChangeCollege(itemValue)}
+                              >
+                                <Picker.Item label="SIT" value="SIT" />
+                                <Picker.Item label="SKNSITS" value="SKNSITS" />
+                              </Picker>
+                            </View>
                             <TextInput
                                 style={styles.inputMultiline}
                                 onChangeText={(value) => handleFormChange("confession", value)}
@@ -65,7 +70,7 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
                             />
                             {   
                                 formError ? 
-                                <Text style={styles.formError}>Please enter username and confession to continue.</Text>
+                                <Text style={styles.formError}>Please enter college and confession to continue.</Text>
                                 :
                                 <React.Fragment />
                             }
@@ -159,6 +164,11 @@ const styles = StyleSheet.create({
     fontSize:15,
     margin: 12,
     marginTop: 8
+  },
+  collegePicker: {
+    margin: 12,
+    borderWidth: 1,
+    // padding: 10,
   }
 });
 
