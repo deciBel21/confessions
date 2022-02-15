@@ -77,6 +77,9 @@ export default class LoginPage extends React.Component {
       </TouchableOpacity>
       <Text  onPress={this.HandleClick}
       style={styles.loginText}>To continue, please {"signup."}</Text>
+      <Text style={styles.copyright}>
+          © 2022 DK Solutions.
+      </Text>
       </View>
     )}
     </View>
@@ -111,5 +114,13 @@ const styles = StyleSheet.create({
       marginTop:-70,
       fontWeight:'bold',
       textDecorationLine:'underline',
+    },
+    copyright:{
+      color:'black',
+      alignSelf:'center',
+      position:'absolute',
+      marginTop:800,
+      fontWeight:'bold',
+      fontSize:15,
     }
 });

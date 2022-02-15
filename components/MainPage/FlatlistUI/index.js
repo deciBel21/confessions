@@ -60,16 +60,12 @@ const  MainPage = (props) => {
   const Header = () =>{
     return(
       <View style={styles.headerFooterStyle}>
-        <Image style={styles.image} source={{ uri: props.photoUrl }}/>
-          <Text style={styles.header}>Stes Confessions</Text>  
-          <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => setModalVisible(!modalVisible)}
-          >
-          <Image
-            style={styles.addButton}
-            source={require('../../../assets/add.png')}
-          />
+        >
+          <Image style={styles.image} source={{ uri: props.photoUrl }}/>
         </TouchableOpacity>
+          <Text style={styles.header}>Stes Confessions</Text> 
       </View>
     )
 
@@ -85,7 +81,7 @@ const  MainPage = (props) => {
   };
  
   return (
-  <View style={{backgroundColor:'white'}}>
+  <View style={{backgroundColor:'#000000'}}>
     <View style={{padding:10}}>
       <FlatList 
       keyExtractor={(item, index) => 'key'+index}
@@ -96,8 +92,8 @@ const  MainPage = (props) => {
       showsVerticalScrollIndicator={false}
       ListFooterComponent={Footer}
       renderItem={({item}) =>
-      <View style={{flex:1}}>
-      <Card style={{padding: 10, margin: 10, borderRadius:18, elevation:10,alignSelf:'center',backgroundColor:'white'}}>
+      <View style={{flex:1,padding:1, elevation:10}}>
+      <Card style={{padding: 11, margin: 10, borderRadius:25, elevation:10,alignSelf:'center',backgroundColor:'#404040'}}>
         <Text style={styles.date}>{item.createdAt}</Text>
         <Text style={styles.UserName}>{item.username}</Text>
         <Text style={styles.Confession}>{item.message}</Text>
@@ -119,7 +115,7 @@ const styles= StyleSheet.create({
         marginStart:25,
         fontWeight:'bold',
         alignItems:'center',
-        color:'black'
+        color:'white'
     },
     image: {
         width:45,
@@ -137,16 +133,16 @@ const styles= StyleSheet.create({
       borderRadius:100,
     },  
     UserName:{
-      color:'black',
+      color:'white',
       fontSize:27,
       fontWeight:'bold',
     },
     Confession:{
-      color:'black',
+      color:'white',
       fontSize:17,
     },
     date:{
-      color:'#806d06'
+      color:'#0ee83a'
     },
     headerFooterStyle: {
       fontSize: 35,
