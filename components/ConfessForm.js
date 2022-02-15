@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput, Picker } from "react-native";
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
@@ -6,9 +6,23 @@ import * as SecureStore from 'expo-secure-store';
 import { IP_ADD } from '@env';
 
 const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
-    const [college, onChangeCollege] = React.useState("SIT");
-    const [confession, onChangeConfession] = React.useState(null);
-    const [formError, setFormError] = React.useState(false);
+    const [college, onChangeCollege] = useState("SIT");
+    const [confession, onChangeConfession] = useState(null);
+    const [formError, setFormError] = useState(false);
+    const [colleges, setColleges] = useState([]);
+
+    const getColleges = async () => {
+      axios.get(`${IP_ADD}:8080/college/colleges`)
+        .then((res) => {
+          console.log(res.data.colleges)
+          setColleges(res.data.colleges);
+        })
+        .catch((err) => console.log("GET Colleges Error:-", err))
+    }
+
+    useEffect(() => {
+      getColleges();
+    },[])
 
     const handleSubmitClick = async function(bool) {
         const data = {
@@ -57,8 +71,11 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
                                 mode='dropdown'
                                 onValueChange={(itemValue, itemIndex) => onChangeCollege(itemValue)}
                               >
-                                <Picker.Item label="SIT" value="SIT" />
-                                <Picker.Item label="SKNSITS" value="SKNSITS" />
+                                {
+                                  colleges.map((college, index) => {
+                                    return <Picker.Item key={index} label={college.name} value={college.name} />
+                                  })
+                                }
                               </Picker>
                             </View>
                             <TextInput
