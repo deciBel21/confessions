@@ -14,7 +14,6 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
     const getColleges = async () => {
       axios.get(`${IP_ADD}:8080/college/colleges`)
         .then((res) => {
-          console.log(res.data.colleges)
           setColleges(res.data.colleges);
         })
         .catch((err) => console.log("GET Colleges Error:-", err))
