@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable, FlatList, Picker } from 'react-native';
+import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable, FlatList } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import {Card} from 'react-native-shadow-cards';
 import ConfessForm from '../../ConfessForm';
 
@@ -98,6 +99,7 @@ const  MainPage = (props) => {
             style={{ height: 60, color: 'black', width: "45%", margin: 10 }}
             mode='dropdown'
             onValueChange={(itemValue, itemIndex) => onChangeCollege(itemValue)}
+            dropdownIconColor= '#fff'
             >
             <Picker.Item label='All Colleges' value='All Colleges' />
             {
