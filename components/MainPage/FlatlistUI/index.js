@@ -91,7 +91,7 @@ const  MainPage = (props) => {
           >
             <Image style={styles.image} source={{ uri: props.photoUrl }}/>
           </TouchableOpacity>
-          <Text style={styles.header}>Stes Confessions</Text> 
+          <Text style={styles.header}>  STES Confessions</Text> 
         </View>
         <View style={styles.filter}>
           <Picker
@@ -118,7 +118,7 @@ const  MainPage = (props) => {
     //View to set in Footer
     return (
       <View style={{alignSelf:'center'}}>
-        <Text style={{fontSize:15,fontWeight:'500'}}>The End!</Text>
+        <Text style={{fontSize:15,fontWeight:'bold',padding:10}}>Thank You!</Text>
       </View>
     );
   };

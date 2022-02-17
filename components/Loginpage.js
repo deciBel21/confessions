@@ -78,7 +78,7 @@ export default class LoginPage extends React.Component {
       <Text  onPress={this.HandleClick}
       style={styles.loginText}>To continue, please {"signup."}</Text>
       <Text style={styles.copyright}>
-          © 2022 DK Solutions.
+          © 2022 DK Tech.
       </Text>
       </View>
     )}
