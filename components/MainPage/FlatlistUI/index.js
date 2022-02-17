@@ -95,7 +95,7 @@ const  MainPage = (props) => {
         <View style={styles.filter}>
           <Picker
             selectedValue={college}
-            style={{ height: 100, color: '#fff', width: "60%", margin: 10 }}
+            style={{ height: 60, color: 'black', width: "45%", margin: 10 }}
             mode='dropdown'
             onValueChange={(itemValue, itemIndex) => onChangeCollege(itemValue)}
             >
@@ -115,14 +115,14 @@ const  MainPage = (props) => {
   const Footer = () => {
     //View to set in Footer
     return (
-      <View style={styles.headerFooterStyle}>
-        <Text>The End!</Text>
+      <View style={{alignSelf:'center'}}>
+        <Text style={{fontSize:15,fontWeight:'500'}}>The End!</Text>
       </View>
     );
   };
  
   return (
-  <View style={{backgroundColor:'#000000'}}>
+  <View style={{backgroundColor:'white'}}>
     <View style={{padding:10}}>
       
       <FlatList 
@@ -134,8 +134,8 @@ const  MainPage = (props) => {
         showsVerticalScrollIndicator={false}
         ListFooterComponent={Footer}
         renderItem={({item}) =>
-          <View style={{flex:1,padding:1, elevation:10}}>
-            <Card style={{padding: 11, margin: 10, borderRadius:25, elevation:10,alignSelf:'center',backgroundColor:'#404040'}}>
+          <View style={{flex:1,padding:1, elevation:10,marginTop:1}}>
+            <Card style={{padding: 10, margin: 10, borderRadius:25, elevation:10,alignSelf:'center',backgroundColor:'#defcf8'}}>
               <Text style={styles.date}>{item.createdAt}</Text>
               <Text style={styles.UserName}>{item.college}</Text>
               <Text style={styles.Confession}>{item.message}</Text>
@@ -157,7 +157,9 @@ const styles= StyleSheet.create({
         marginStart:25,
         fontWeight:'bold',
         alignItems:'center',
-        color:'white'
+        color:'black',
+        elevation:10,
+        
     },
     image: {
         width:45,
@@ -175,22 +177,22 @@ const styles= StyleSheet.create({
       borderRadius:100,
     },  
     UserName:{
-      color:'white',
+      color:'black',
       fontSize:27,
       fontWeight:'bold',
     },
     Confession:{
-      color:'white',
+      color:'black',
       fontSize:17,
     },
     date:{
-      color:'#0ee83a'
+      color:'#27bf13'
     },
     headerFooterStyle: {
       fontSize: 35,
       marginTop:30,
       fontWeight:'bold',
-      color:'black'
+      color:'black',
     },
     filter: {
       flexDirection: 'row',
