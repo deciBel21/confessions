@@ -118,7 +118,7 @@ const  MainPage = (props) => {
     //View to set in Footer
     return (
       <View style={{alignSelf:'center'}}>
-        <Text style={{fontSize:15,fontWeight:'bold',padding:10}}>Thank You!</Text>
+        <Text style={{fontSize:15,fontWeight:'bold',padding:10,color:'white'}}>Thank You!</Text>
       </View>
     );
   };
