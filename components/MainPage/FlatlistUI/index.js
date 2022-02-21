@@ -3,15 +3,27 @@ import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable,
 import {Picker} from '@react-native-picker/picker';
 import {Card} from 'react-native-shadow-cards';
 import ConfessForm from '../../ConfessForm';
+import { SimpleLineIcons } from '@expo/vector-icons';
+import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font';  
 
 import { IP_ADD } from '@env';
 import axios from 'axios';
+
+//Fetch the font
+const fetchFonts = async () =>
+   Font.loadAsync({
+    'Header': require('../../../assets/fonts/FredokaOne-Regular.ttf'),
+    'username' : require('../../../assets/fonts/DMSerifDisplay-Regular.ttf'),
+    'style': require('../../../assets/fonts/Aldrich-Regular.ttf')
+  });
 
 //This is just a demo for the Main Page UI 
 const  MainPage = (props) => {
   const [ modalVisible, setModalVisible ] = useState(false);
   const [college, onChangeCollege] = useState("All Colleges");
   const [colleges, setColleges] = useState([]);
+  const [fontLoaded, setFontLoaded ] = useState(false);
 
   const handleModalVisibility = function(bool) {
     setModalVisible(bool);
@@ -56,7 +68,13 @@ const  MainPage = (props) => {
       console.log(error)
     }
   }
-  const {values} = data
+  const likeFunction = (id) =>{
+    alert(`Confession Liked: ${id}`)
+  }
+
+  const dislikeFunction = (id) =>{
+    alert(`Confession disliked: ${id}`)
+  }
 
   const onRefresh = () => {
     setIsFetching(true);
@@ -86,11 +104,7 @@ const  MainPage = (props) => {
     return(
       <React.Fragment>
         <View style={styles.headerFooterStyle}>
-          <TouchableOpacity
-            onPress={() => setModalVisible(!modalVisible)}
-          >
             <Image style={styles.image} source={{ uri: props.photoUrl }}/>
-          </TouchableOpacity>
           <Text style={styles.header}>  STES Confessions</Text> 
         </View>
         <View style={styles.filter}>
@@ -99,7 +113,7 @@ const  MainPage = (props) => {
             style={{ height: 60, color: 'black', width: "45%", margin: 10 }}
             mode='dropdown'
             onValueChange={(itemValue, itemIndex) => onChangeCollege(itemValue)}
-            dropdownIconColor= '#fff'
+            dropdownIconColor= 'black'
             >
             <Picker.Item label='All Colleges' value='All Colleges' />
             {
@@ -122,7 +136,17 @@ const  MainPage = (props) => {
       </View>
     );
   };
- 
+
+  if (!fontLoaded) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setFontLoaded(true)}
+        onError={(err) => console.log(err)}
+      />
+    );
+  }
+
   return (
   <View style={{backgroundColor:'white'}}>
     <View style={{padding:10}}>
@@ -141,6 +165,18 @@ const  MainPage = (props) => {
               <Text style={styles.date}>{item.createdAt}</Text>
               <Text style={styles.UserName}>{item.college}</Text>
               <Text style={styles.Confession}>{item.message}</Text>
+              <View style={{flex:1, flexDirection:'row', justifyContent:'space-around',marginStart:230,marginTop:20}}>
+              <TouchableOpacity
+              onPress={() => likeFunction(item._id)}
+             >
+             <SimpleLineIcons name="like" size={24} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity style={{width:'50%'}}
+              onPress={() => dislikeFunction(item._id)}
+             >
+             <SimpleLineIcons name="dislike" size={24} color="black" />
+            </TouchableOpacity>
+              </View>
             </Card>
           </View>
           }
@@ -148,6 +184,9 @@ const  MainPage = (props) => {
       />
     </View>
     <ConfessForm modalVisible={modalVisible} handleModalVisibility={handleModalVisibility} />
+    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.add}>
+          <Text style={styles.addIcon}>+</Text>
+        </TouchableOpacity>
   </View>
   );
 }
@@ -157,10 +196,10 @@ const styles= StyleSheet.create({
         fontSize: 35,
         marginTop:-45,
         marginStart:25,
-        fontWeight:'bold',
         alignItems:'center',
         color:'black',
         elevation:10,
+        fontFamily:'Header'
         
     },
     image: {
@@ -181,11 +220,13 @@ const styles= StyleSheet.create({
     UserName:{
       color:'black',
       fontSize:27,
-      fontWeight:'bold',
+      fontWeight:'900',
+      fontFamily:'username',
     },
     Confession:{
       color:'black',
-      fontSize:17,
+      fontSize:22,
+      fontFamily:'style'
     },
     date:{
       color:'#27bf13'
@@ -199,6 +240,41 @@ const styles= StyleSheet.create({
     filter: {
       flexDirection: 'row',
       color: '#fff'
+    },
+    likeButton:{
+      height:30,
+      width:30,
+    },
+    dislikeButton:{
+      marginTop:5,
+      height:30,
+      width:30,
+    },
+    add: {
+      position: 'absolute',
+      width: 56,
+      height: 56,
+      alignItems: 'center',
+      justifyContent: 'center',
+      right: 20,
+      bottom:100,
+      backgroundColor: '#03A9F4',
+      borderRadius: 30,
+      elevation: 8
+    },
+    addIcon: {
+      fontSize: 50,
+      marginTop:-8,
+      color: 'white',
     }
 })
 export default MainPage;
+// marginStart:190,
+// marginTop:10,
+// height:40,
+// width:40,
+
+// marginStart:250,
+//       marginTop:-30,
+//       height:40,
+//       // width:40

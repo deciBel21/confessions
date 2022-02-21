@@ -69,6 +69,7 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
                                 selectedValue={college}
                                 style={{ height: 50, width: "100%" }}
                                 mode='dropdown'
+                                dropdownIconColor= 'black'
                                 onValueChange={(itemValue, itemIndex) => onChangeCollege(itemValue)}
                               >
                                 {
