@@ -193,8 +193,8 @@ const  MainPage = (props) => {
 const styles= StyleSheet.create({
     header: {
         alignSelf:'center',
-        fontSize: 35,
-        marginTop:-45,
+        fontSize: 30,
+        marginTop:-39,
         marginStart:25,
         alignItems:'center',
         color:'black',
@@ -219,13 +219,14 @@ const styles= StyleSheet.create({
     },  
     UserName:{
       color:'black',
-      fontSize:27,
+      fontSize:25,
       fontWeight:'900',
       fontFamily:'username',
     },
     Confession:{
       color:'black',
-      fontSize:22,
+      fontSize:18,
+      opacity:0.78,
       fontFamily:'style'
     },
     date:{
