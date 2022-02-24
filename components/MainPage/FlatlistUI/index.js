@@ -109,8 +109,27 @@ const  MainPage = (props) => {
     // )
   }
 
-  const dislikeFunction = (confession) =>{
-    alert(`Confession disliked: ${JSON.stringify(confession)}`)
+  const dislikeFunction = async (confession) => {
+    const token = await SecureStore.getItemAsync('token');
+    let postData = {
+      userId, 
+      confessionId: confession._id
+    }
+    const confessions = [ ...data ];
+    const confessionFound = confessions.find( ({ _id }) => _id === confession._id);
+    const dislikeFound = confessionFound.dislikes.find(like => like.userId == userId);
+    postData.liked = false;
+    postData.disliked = dislikeFound ? false : true;
+    axios.post(`${IP_ADD}:8080/confession/like_dislike`, postData, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      } 
+    })
+    .then(async (res) => {
+      alert(`DISLIKED:- ${JSON.stringify(res.data)}`);
+      getData();
+    })
+    .catch(err => console.log("DISLIKE ERROR:-", err))
   }
 
   const onRefresh = () => {
