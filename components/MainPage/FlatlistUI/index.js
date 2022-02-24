@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable, FlatList } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {Card} from 'react-native-shadow-cards';
-import ConfessForm from '../../ConfessForm';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';  
+import * as SecureStore from 'expo-secure-store';
+import axios from 'axios';
 
 import { IP_ADD } from '@env';
-import axios from 'axios';
+import ConfessForm from '../../ConfessForm';
 
 //Fetch the font
 const fetchFonts = async () =>
@@ -24,11 +25,12 @@ const  MainPage = (props) => {
   const [college, onChangeCollege] = useState("All Colleges");
   const [colleges, setColleges] = useState([]);
   const [fontLoaded, setFontLoaded ] = useState(false);
+  const [userId, setuserId] = useState('')
 
   const handleModalVisibility = function(bool) {
     setModalVisible(bool);
     getData();
-  }
+  } 
   const [data, setData] =useState([]);
   const [isLoading, setisLoading]= useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -68,12 +70,12 @@ const  MainPage = (props) => {
       console.log(error)
     }
   }
-  const likeFunction = (id) =>{
-    alert(`Confession Liked: ${id}`)
+  const likeFunction = (confession) =>{
+    alert(`Confession Liked: ${JSON.stringify(confession)}`)
   }
 
-  const dislikeFunction = (id) =>{
-    alert(`Confession disliked: ${id}`)
+  const dislikeFunction = (confession) =>{
+    alert(`Confession disliked: ${JSON.stringify(confession)}`)
   }
 
   const onRefresh = () => {
@@ -81,11 +83,16 @@ const  MainPage = (props) => {
     getData();
   };
 
+  const setUserIdToState = async () => {
+    const userId = await SecureStore.getItemAsync('userId');
+    setuserId(userId);
+  }
   
   useEffect(() => {
+    setUserIdToState();
     getColleges();
     getData();
-  },[college])
+  },[college, userId])
  
   // const renderItem = (data) =>{
   //   return(
@@ -167,12 +174,12 @@ const  MainPage = (props) => {
               <Text style={styles.Confession}>{item.message}</Text>
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around',marginStart:230,marginTop:20}}>
               <TouchableOpacity
-              onPress={() => likeFunction(item._id)}
+              onPress={() => likeFunction(item)}
              >
              <SimpleLineIcons name="like" size={24} color="black" />
             </TouchableOpacity>
             <TouchableOpacity style={{width:'50%'}}
-              onPress={() => dislikeFunction(item._id)}
+              onPress={() => dislikeFunction(item)}
              >
              <SimpleLineIcons name="dislike" size={24} color="black" />
             </TouchableOpacity>

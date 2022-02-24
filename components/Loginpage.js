@@ -5,7 +5,7 @@ import React from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import {IP_ADD} from '@env';
-
+ 
 export default class LoginPage extends React.Component {
   constructor(props) {
     super(props)
@@ -47,6 +47,7 @@ export default class LoginPage extends React.Component {
 
                 // Save token in local storage
                 this.saveToken("token", response.data.token);
+                this.saveToken("userId", response.data.userId);
               }
             })
         } else {
