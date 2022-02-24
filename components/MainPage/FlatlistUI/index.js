@@ -31,7 +31,7 @@ const  MainPage = (props) => {
     setModalVisible(bool);
     getData();
   } 
-  const [data, setData] =useState([]);
+  const [data, setData] = useState([]);
   const [isLoading, setisLoading]= useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -70,8 +70,43 @@ const  MainPage = (props) => {
       console.log(error)
     }
   }
-  const likeFunction = (confession) =>{
-    alert(`Confession Liked: ${JSON.stringify(confession)}`)
+
+  const likeFunction = async (confession) => {
+    const token = await SecureStore.getItemAsync('token');
+    let postData = {
+      userId, 
+      confessionId: confession._id
+    }
+    const confessions = [ ...data ];
+    const confessionFound = confessions.find( ({ _id }) => _id === confession._id);
+    const likeFound = confessionFound.likes.find(like => like.userId == userId);
+    postData.disliked = false;
+    postData.liked = likeFound ? false : true;
+    axios.post(`${IP_ADD}:8080/confession/like_dislike`, postData, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      } 
+    })
+    .then(async (res) => {
+      alert(`LIKED:- ${JSON.stringify(res.data)}`);
+      await getData();
+    })
+    .catch(err => console.log("LIKE ERROR:-", err))
+
+    // setData(
+    //   data.map((el, index) => {
+    //     if(el._id == confession._id) {
+    //       let found = false;
+    //       el.likes = el.likes.map((obj, ind) => {
+    //         if(obj.userId == userId) {
+    //           obj.liked = !obj.liked;
+    //         }
+    //         return obj;
+    //       })
+    //       return el;
+    //     }
+    //   })
+    // )
   }
 
   const dislikeFunction = (confession) =>{
