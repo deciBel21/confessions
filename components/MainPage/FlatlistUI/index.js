@@ -3,6 +3,8 @@ import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable,
 import {Picker} from '@react-native-picker/picker';
 import {Card} from 'react-native-shadow-cards';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';  
 import * as SecureStore from 'expo-secure-store';
@@ -88,7 +90,6 @@ const  MainPage = (props) => {
       } 
     })
     .then(async (res) => {
-      alert(`LIKED:- ${JSON.stringify(res.data)}`);
       await getData();
     })
     .catch(err => console.log("LIKE ERROR:-", err))
@@ -126,7 +127,6 @@ const  MainPage = (props) => {
       } 
     })
     .then(async (res) => {
-      alert(`DISLIKED:- ${JSON.stringify(res.data)}`);
       getData();
     })
     .catch(err => console.log("DISLIKE ERROR:-", err))
@@ -140,6 +140,16 @@ const  MainPage = (props) => {
   const setUserIdToState = async () => {
     const userId = await SecureStore.getItemAsync('userId');
     setuserId(userId);
+  }
+
+  const liked = (confession) => {
+    const likeFound = confession.likes.find(like => like.userId == userId);
+    return likeFound ? true : false;
+  }
+  
+  const disliked = (confession) => {
+    const dislikeFound = confession.dislikes.find(dislike => dislike.userId == userId);
+    return dislikeFound ? true : false;
   }
   
   useEffect(() => {
@@ -230,12 +240,24 @@ const  MainPage = (props) => {
               <TouchableOpacity
               onPress={() => likeFunction(item)}
              >
-             <SimpleLineIcons name="like" size={24} color="black" />
+              {
+                liked(item) 
+                ? 
+                <Entypo name="thumbs-up" size={24} color="black" />
+                :
+                <Feather name="thumbs-up" size={24} color="black" />
+              }
             </TouchableOpacity>
             <TouchableOpacity style={{width:'50%'}}
               onPress={() => dislikeFunction(item)}
              >
-             <SimpleLineIcons name="dislike" size={24} color="black" />
+              {
+                disliked(item)
+                ?
+                <Entypo name="thumbs-down" size={24} color="black" />
+                :
+                <Feather name="thumbs-down" size={24} color="black" />
+              }
             </TouchableOpacity>
               </View>
             </Card>
