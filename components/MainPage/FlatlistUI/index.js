@@ -226,7 +226,7 @@ const styles= StyleSheet.create({
     Confession:{
       color:'black',
       fontSize:18,
-      opacity:0.78,
+      opacity:0.57,
       fontFamily:'style'
     },
     date:{
