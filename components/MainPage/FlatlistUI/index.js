@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable, FlatList } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {Card} from 'react-native-shadow-cards';
-import ConfessForm from '../../ConfessForm';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';  
+import * as SecureStore from 'expo-secure-store';
+import axios from 'axios';
 
 import { IP_ADD } from '@env';
-import axios from 'axios';
+import ConfessForm from '../../ConfessForm';
 
 //Fetch the font
 const fetchFonts = async () =>
@@ -24,12 +27,13 @@ const  MainPage = (props) => {
   const [college, onChangeCollege] = useState("All Colleges");
   const [colleges, setColleges] = useState([]);
   const [fontLoaded, setFontLoaded ] = useState(false);
+  const [userId, setuserId] = useState('')
 
   const handleModalVisibility = function(bool) {
     setModalVisible(bool);
     getData();
-  }
-  const [data, setData] =useState([]);
+  } 
+  const [data, setData] = useState([]);
   const [isLoading, setisLoading]= useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -68,12 +72,64 @@ const  MainPage = (props) => {
       console.log(error)
     }
   }
-  const likeFunction = (id) =>{
-    alert(`Confession Liked: ${id}`)
+
+  const likeFunction = async (confession) => {
+    const token = await SecureStore.getItemAsync('token');
+    let postData = {
+      userId, 
+      confessionId: confession._id
+    }
+    const confessions = [ ...data ];
+    const confessionFound = confessions.find( ({ _id }) => _id === confession._id);
+    const likeFound = confessionFound.likes.find(like => like.userId == userId);
+    postData.disliked = false;
+    postData.liked = likeFound ? false : true;
+    axios.post(`${IP_ADD}:8080/confession/like_dislike`, postData, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      } 
+    })
+    .then(async (res) => {
+      await getData();
+    })
+    .catch(err => console.log("LIKE ERROR:-", err))
+
+    // setData(
+    //   data.map((el, index) => {
+    //     if(el._id == confession._id) {
+    //       let found = false;
+    //       el.likes = el.likes.map((obj, ind) => {
+    //         if(obj.userId == userId) {
+    //           obj.liked = !obj.liked;
+    //         }
+    //         return obj;
+    //       })
+    //       return el;
+    //     }
+    //   })
+    // )
   }
 
-  const dislikeFunction = (id) =>{
-    alert(`Confession disliked: ${id}`)
+  const dislikeFunction = async (confession) => {
+    const token = await SecureStore.getItemAsync('token');
+    let postData = {
+      userId, 
+      confessionId: confession._id
+    }
+    const confessions = [ ...data ];
+    const confessionFound = confessions.find( ({ _id }) => _id === confession._id);
+    const dislikeFound = confessionFound.dislikes.find(like => like.userId == userId);
+    postData.liked = false;
+    postData.disliked = dislikeFound ? false : true;
+    axios.post(`${IP_ADD}:8080/confession/like_dislike`, postData, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      } 
+    })
+    .then(async (res) => {
+      getData();
+    })
+    .catch(err => console.log("DISLIKE ERROR:-", err))
   }
 
   const onRefresh = () => {
@@ -81,11 +137,26 @@ const  MainPage = (props) => {
     getData();
   };
 
+  const setUserIdToState = async () => {
+    const userId = await SecureStore.getItemAsync('userId');
+    setuserId(userId);
+  }
+
+  const liked = (confession) => {
+    const likeFound = confession.likes.find(like => like.userId == userId);
+    return likeFound ? true : false;
+  }
+  
+  const disliked = (confession) => {
+    const dislikeFound = confession.dislikes.find(dislike => dislike.userId == userId);
+    return dislikeFound ? true : false;
+  }
   
   useEffect(() => {
+    setUserIdToState();
     getColleges();
     getData();
-  },[college])
+  },[college, userId])
  
   // const renderItem = (data) =>{
   //   return(
@@ -167,14 +238,26 @@ const  MainPage = (props) => {
               <Text style={styles.Confession}>{item.message}</Text>
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around',marginStart:230,marginTop:20}}>
               <TouchableOpacity
-              onPress={() => likeFunction(item._id)}
+              onPress={() => likeFunction(item)}
              >
-             <SimpleLineIcons name="like" size={24} color="black" />
+              {
+                liked(item) 
+                ? 
+                <Entypo name="thumbs-up" size={24} color="black" />
+                :
+                <Feather name="thumbs-up" size={24} color="black" />
+              }
             </TouchableOpacity>
             <TouchableOpacity style={{width:'50%'}}
-              onPress={() => dislikeFunction(item._id)}
+              onPress={() => dislikeFunction(item)}
              >
-             <SimpleLineIcons name="dislike" size={24} color="black" />
+              {
+                disliked(item)
+                ?
+                <Entypo name="thumbs-down" size={24} color="black" />
+                :
+                <Feather name="thumbs-down" size={24} color="black" />
+              }
             </TouchableOpacity>
               </View>
             </Card>
