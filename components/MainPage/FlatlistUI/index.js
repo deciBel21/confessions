@@ -26,8 +26,11 @@ const  MainPage = (props) => {
   const [ modalVisible, setModalVisible ] = useState(false);
   const [college, onChangeCollege] = useState("All Colleges");
   const [colleges, setColleges] = useState([]);
+  const [sort, onChangeSort] = useState("New Confessions");
+  const [sorts, setSorts] = useState([]);
   const [fontLoaded, setFontLoaded ] = useState(false);
   const [userId, setuserId] = useState('')
+  const [likeId, setlikeId] = useState([]);
 
   const handleModalVisibility = function(bool) {
     setModalVisible(bool);
@@ -45,29 +48,66 @@ const  MainPage = (props) => {
       .catch((err) => console.log("GET Colleges Error:-", err))
   }
 
+  const getSort = async () => {
+    axios.get(`${IP_ADD}:8080/sort/sorts`)
+      .then((res) => {
+        setSorts(res.data.sorts);
+      })
+      .catch((err) => console.log("GET Sort Error:-", err))
+  }
+
   const getData = async() =>{
     try {
       setisLoading(true);
-      if(college === "All Colleges") {
-        return fetch(`${IP_ADD}:8080/confession/confessions`)
-                .then((response) => response.json())
-                .then((responseJson) => {
-                  setData(responseJson.confessions.reverse())
-                  setIsFetching(false);
-                })
-                .catch((e) => console.log(e))
+      if(college === "All Colleges" ) {
+        if(sort === "New Confessions"){
+          return fetch(`${IP_ADD}:8080/confession/confessions`)
+          .then((response) => response.json())
+          .then((responseJson) => {
+            setData(responseJson.confessions.reverse())
+            setIsFetching(false);
+          })
+          .catch((e) => console.log(e))
+        }
+        if(sort === "Most Liked"){
+          return fetch(`${IP_ADD}:8080/confession/like_dislike`)
+          .then((response) => response.json())
+          .then(responseJson => {
+            const most_liked_confessions =
+                responseJson.confessions
+                  .sort((a,b) => a.likes>b.likes)
+                  .reverse()
+                  .filter( most_liked_confession => most_liked_confession.likes!=0)
+            setData(most_liked_confessions)
+            setIsFetching(false);
+          })
+          .catch((e) => console.log(e))
       }
+        if(sort === "Most Disliked"){
+          return fetch(`${IP_ADD}:8080/confession/like_dislike`)
+          .then((response) => response.json())
+          .then(responseJson => {
+            const most_disliked_confessions =
+                responseJson.confessions
+                  .sort((a,b) => a.likes>b.likes)
+                  .reverse()
+                  .filter( most_disliked_confession => most_disliked_confession.dislikes!=0)
+            setData(most_disliked_confessions)
+            setIsFetching(false);
+          })
+          .catch((e) => console.log(e))
+        }
+      }    
       else {
         axios.get(`${IP_ADD}:8080/confession/confessions/${college}`)
           .then((res) => {
-            setData(res.data.confessions);
+            setData(res.data.confessions.reverse());
           })
           .catch((err) => {
             console.log("Confession College Error:-", err);
           })
           .finally(() => setisLoading(false))
       }
-
     } catch (error) {
       console.log(error)
     }
@@ -133,8 +173,9 @@ const  MainPage = (props) => {
   }
 
   const onRefresh = () => {
-    setIsFetching(true);
     getData();
+    getColleges();
+    getSort();
   };
 
   const setUserIdToState = async () => {
@@ -155,8 +196,9 @@ const  MainPage = (props) => {
   useEffect(() => {
     setUserIdToState();
     getColleges();
+    getSort();
     getData();
-  },[college, userId])
+  },[college, userId, sort])
  
   // const renderItem = (data) =>{
   //   return(
@@ -190,6 +232,20 @@ const  MainPage = (props) => {
             {
               colleges.map((college, index) => {
                 return <Picker.Item  key={index} label={college.name} value={college.name} />
+              })
+            }
+          </Picker>
+          <Picker
+            selectedValue={sort}
+            style={{ height: 60, color: 'black', width: "45%", margin: 10 }}
+            mode='dropdown'
+            onValueChange={(itemValue, itemIndex) => onChangeSort(itemValue)}
+            dropdownIconColor= 'black'
+            >
+            <Picker.Item label='New Confessions' value='New Confessions' />
+            {
+              sorts.map((sort, index) => {
+                return <Picker.Item  key={index} label={sort.sort} value={sort.sort} />
               })
             }
           </Picker>
