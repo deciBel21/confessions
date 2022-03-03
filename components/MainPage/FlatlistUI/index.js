@@ -70,7 +70,7 @@ const  MainPage = (props) => {
           .catch((e) => console.log(e))
         }
         if(sort === "Most Liked"){
-          return fetch(`${IP_ADD}:8080/confession/like_dislike`)
+          return fetch(`${IP_ADD}:8080/confession/confessions`)
           .then((response) => response.json())
           .then(responseJson => {
             const most_liked_confessions =
@@ -84,7 +84,7 @@ const  MainPage = (props) => {
           .catch((e) => console.log(e))
       }
         if(sort === "Most Disliked"){
-          return fetch(`${IP_ADD}:8080/confession/like_dislike`)
+          return fetch(`${IP_ADD}:8080/confession/confessions`)
           .then((response) => response.json())
           .then(responseJson => {
             const most_disliked_confessions =
