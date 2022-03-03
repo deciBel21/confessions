@@ -89,7 +89,7 @@ const  MainPage = (props) => {
           .then(responseJson => {
             const most_disliked_confessions =
                 responseJson.confessions
-                  .sort((a,b) => a.likes>b.likes)
+                  .sort((a,b) => a.dislikes>b.dislikes)
                   .reverse()
                   .filter( most_disliked_confession => most_disliked_confession.dislikes!=0)
             setData(most_disliked_confessions)
@@ -99,14 +99,44 @@ const  MainPage = (props) => {
         }
       }    
       else {
-        axios.get(`${IP_ADD}:8080/confession/confessions/${college}`)
-          .then((res) => {
-            setData(res.data.confessions.reverse());
+        if(sort ==='New Confessions'){
+          return fetch(`${IP_ADD}:8080/confession/confessions/${college}`)
+          .then((response) => response.json())
+          .then(responseJson => {
+            setData(responseJson.confessions.reverse())
+            setIsFetching(false);
           })
-          .catch((err) => {
-            console.log("Confession College Error:-", err);
+          .catch((e) => console.log(e))
+        }
+
+        if(sort === 'Most Liked'){
+          return fetch(`${IP_ADD}:8080/confession/confessions/${college}`)
+          .then((response) => response.json())
+          .then(responseJson => {
+            const most_liked_confessions =
+                responseJson.confessions
+                  .sort((a,b) => a.likes>b.likes)
+                  .reverse()
+                  .filter( most_liked_confession => most_liked_confession.likes!=0)
+            setData(most_liked_confessions)
+            setIsFetching(false);
           })
-          .finally(() => setisLoading(false))
+          .catch((e) => console.log(e))
+        }
+        if(sort === 'Most Disliked'){
+          return fetch(`${IP_ADD}:8080/confession/confessions/${college}`)
+          .then((response) => response.json())
+          .then(responseJson => {
+            const most_disliked_confessions =
+                responseJson.confessions
+                  .sort((a,b) => a.dislikes>b.dislikes)
+                  .reverse()
+                  .filter( most_disliked_confession => most_disliked_confession.dislikes!=0)
+            setData(most_disliked_confessions)
+            setIsFetching(false);
+          })
+          .catch((e) => console.log(e))
+        }
       }
     } catch (error) {
       console.log(error)
