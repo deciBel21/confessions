@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image,StyleSheet,TouchableOpacity, Alert, Modal, Pressable, FlatList } from 'react-native';
+import { View, Text, Image,StyleSheet,TouchableOpacity, FlatList } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {Card} from 'react-native-shadow-cards';
-import { SimpleLineIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import AppLoading from 'expo-app-loading';
@@ -16,7 +15,9 @@ import ConfessForm from '../../ConfessForm';
 //Fetch the font
 const fetchFonts = async () =>
    Font.loadAsync({
-    'Header': require('../../../assets/fonts/FredokaOne-Regular.ttf'),
+    // 'Header': require('../../../assets/fonts/FredokaOne-Regular.ttf'),
+    'Header': require('../../../assets/fonts/Roboto-Medium.ttf'),
+    'Confession': require('../../../assets/fonts/Roboto-Regular.ttf'),
     'username' : require('../../../assets/fonts/DMSerifDisplay-Regular.ttf'),
     'style': require('../../../assets/fonts/Aldrich-Regular.ttf')
   });
@@ -30,7 +31,6 @@ const  MainPage = (props) => {
   const [sorts, setSorts] = useState([]);
   const [fontLoaded, setFontLoaded ] = useState(false);
   const [userId, setuserId] = useState('')
-  const [likeId, setlikeId] = useState([]);
 
   const handleModalVisibility = function(bool) {
     setModalVisible(bool);
@@ -253,7 +253,7 @@ const  MainPage = (props) => {
         <View style={styles.filter}>
           <Picker
             selectedValue={college}
-            style={{ height: 60, color: 'black', width: "45%", margin: 10 }}
+            style={{ height: 60, color: 'black', width: "45%", margin: 10, marginTop: 25, marginBottom: 2 }}
             mode='dropdown'
             onValueChange={(itemValue, itemIndex) => onChangeCollege(itemValue)}
             dropdownIconColor= 'black'
@@ -267,7 +267,7 @@ const  MainPage = (props) => {
           </Picker>
           <Picker
             selectedValue={sort}
-            style={{ height: 60, color: 'black', width: "45%", margin: 10 }}
+            style={{ height: 60, color: 'black', width: "45%", margin: 10, marginTop: 25, marginBottom: 2 }}
             mode='dropdown'
             onValueChange={(itemValue, itemIndex) => onChangeSort(itemValue)}
             dropdownIconColor= 'black'
@@ -318,7 +318,7 @@ const  MainPage = (props) => {
         ListFooterComponent={Footer}
         renderItem={({item}) =>
           <View style={{flex:1,padding:1, elevation:10,marginTop:1}}>
-            <Card style={{padding: 10, margin: 10, borderRadius:25, elevation:10,alignSelf:'center',backgroundColor:'#defcf8'}}>
+            <Card style={{padding: 10, margin: 10, marginBottom: 5, borderRadius:10, elevation:10,alignSelf:'center',backgroundColor:'#F5F5F5', boxShadow: 'none', shadowColor: '#fff'}}>
               <Text style={styles.date}>{item.createdAt}</Text>
               <Text style={styles.UserName}>{item.college}</Text>
               <Text style={styles.Confession}>{item.message}</Text>
@@ -363,18 +363,20 @@ const styles= StyleSheet.create({
     header: {
         alignSelf:'center',
         fontSize: 30,
-        marginTop:-39,
+        marginTop:-44,
         marginStart:25,
         alignItems:'center',
         color:'black',
         elevation:10,
-        fontFamily:'Header'
-        
+        // fontWeight:'bold',
+        fontFamily:'Header',
+        fontWeight: 'bold'
     },
     image: {
         width:45,
         height:45,
         marginTop:15,
+        marginLeft: 10,
         borderColor: "rgba(0,0,0,0.2)",
         borderRadius: 150,
     },
@@ -390,16 +392,24 @@ const styles= StyleSheet.create({
       color:'black',
       fontSize:25,
       fontWeight:'900',
-      fontFamily:'username',
+      fontFamily:'Header',
+      marginTop: 9,
+      marginBottom: 2,
+      letterSpacing: 0.3,
     },
     Confession:{
       color:'black',
-      fontSize:18,
-      opacity:0.57,
-      fontFamily:'style'
+      fontSize: 15,
+      letterSpacing: 0.3,
+      lineHeight: 21,
+      // opacity:0.57,
+      fontFamily:'Confession'
     },
     date:{
-      color:'#27bf13'
+      fontSize: 12,
+      opacity:0.57,
+      color:'#000',
+      fontFamily:'Confession'
     },
     headerFooterStyle: {
       fontSize: 35,
@@ -426,9 +436,9 @@ const styles= StyleSheet.create({
       height: 56,
       alignItems: 'center',
       justifyContent: 'center',
-      right: 20,
-      bottom:100,
-      backgroundColor: '#03A9F4',
+      right: 15,
+      bottom:80,
+      backgroundColor: '#000',
       borderRadius: 30,
       elevation: 8
     },
