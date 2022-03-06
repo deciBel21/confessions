@@ -323,28 +323,30 @@ const  MainPage = (props) => {
               <Text style={styles.UserName}>{item.college}</Text>
               <Text style={styles.Confession}>{item.message}</Text>
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around',marginStart:230,marginTop:20}}>
-              <TouchableOpacity
-              onPress={() => likeFunction(item)}
-             >
-              {
-                liked(item) 
-                ? 
-                <Entypo name="thumbs-up" size={24} color="black" />
-                :
-                <Feather name="thumbs-up" size={24} color="black" />
-              }
-            </TouchableOpacity>
-            <TouchableOpacity style={{width:'50%'}}
-              onPress={() => dislikeFunction(item)}
-             >
-              {
-                disliked(item)
-                ?
-                <Entypo name="thumbs-down" size={24} color="black" />
-                :
-                <Feather name="thumbs-down" size={24} color="black" />
-              }
-            </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => likeFunction(item)}
+                >
+                  {
+                    liked(item) 
+                    ? 
+                    <Entypo name="thumbs-up" size={24} color="black" />
+                    :
+                    <Feather name="thumbs-up" size={24} color="black" />
+                  }
+                </TouchableOpacity>
+                <Text>{ item.likes ? item.likes.length : '' }</Text>
+                <TouchableOpacity
+                  onPress={() => dislikeFunction(item)}
+                >
+                  {
+                    disliked(item)
+                    ?
+                    <Entypo name="thumbs-down" size={24} color="black" />
+                    :
+                    <Feather name="thumbs-down" size={24} color="black" />
+                  }
+                </TouchableOpacity>
+                <Text>{ item.dislikes ? item.dislikes.length : '' }</Text>
               </View>
             </Card>
           </View>
