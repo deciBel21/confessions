@@ -99,6 +99,7 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
                             >
                             <Text style={styles.textStyle}>Submit</Text>
                         </Pressable>
+                        <Text style={styles.note}>The confession you post remains anonymous, even to the developer.</Text>
                     </View>
                 </View>
             </Modal>
@@ -187,6 +188,13 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     // padding: 10,
+  },
+  note: {
+    textAlign: "center",
+    fontSize: 12,
+    opacity: 0.55,
+    marginHorizontal: 12,
+    marginVertical: 9
   }
 });
 
