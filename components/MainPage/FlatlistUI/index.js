@@ -229,6 +229,45 @@ const  MainPage = (props) => {
     getSort();
     getData();
   },[college, userId, sort])
+
+  const getTime = (iso) => {
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    // Current Date
+    const current = new Date();
+    // cons
+    const isoMS = new Date(iso);
+    const difference = Math.round((current - isoMS)/1000);
+
+    // Seconds
+    if(difference < 60) {
+      return difference + ' seconds ago';
+    }
+    else {
+      // Minutes
+      const minutes = Math.floor(difference / 60);
+      if(minutes < 60) {
+        return minutes + ' minutes ago';
+      }
+      else {
+        // Hours
+        const hours = Math.floor(minutes / 60);
+        if(hours < 24) {
+          return hours + ' hours ago';
+        }
+        else {
+          // Days
+          const days = Math.floor(hours / 24);
+          if(days <= 7) {
+            return days + ' days ago';
+          }
+          else {
+            // Date, month, year
+            return `${isoMS.getDate()} ${months[isoMS.getMonth()]}, ${isoMS.getFullYear()}`
+          }
+        }
+      }
+    }
+  }
  
   // const renderItem = (data) =>{
   //   return(
@@ -319,7 +358,7 @@ const  MainPage = (props) => {
         renderItem={({item}) =>
           <View style={{flex:1,padding:1, elevation:10,marginTop:1}}>
             <Card style={{padding: 10, margin: 10, marginBottom: 5, borderRadius:10, elevation:10,alignSelf:'center',backgroundColor:'#F5F5F5', boxShadow: 'none', shadowColor: '#fff'}}>
-              <Text style={styles.date}>{item.createdAt}</Text>
+              <Text style={styles.date}>{getTime(item.createdAt)}</Text>
               <Text style={styles.UserName}>{item.college}</Text>
               <Text style={styles.Confession}>{item.message}</Text>
               <View style={{flex:1, flexDirection:'row', justifyContent:'space-around',marginStart:230,marginTop:20}}>
