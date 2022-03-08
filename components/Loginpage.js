@@ -4,7 +4,6 @@ import MainPage from './MainPage/FlatlistUI';
 import React from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import {IP_ADD} from '@env';
  
 export default class LoginPage extends React.Component {
   constructor(props) {
@@ -25,7 +24,6 @@ export default class LoginPage extends React.Component {
           scopes: ["profile", "email"]
         })
         console.log("Result.user", result.user)
-        console.log(IP_ADD)
         if (result.type === "success") {
           const { id, email, givenName, familyName, photoUrl, name } = result.user;
           const data = {
@@ -35,7 +33,7 @@ export default class LoginPage extends React.Component {
             avatar: photoUrl,
             googleId: id
           }
-          axios.post(`${IP_ADD}:8080/user/login`, data)
+          axios.post(`${this.props.URL}/user/login`, data)
             .then(async (response) => {
               if(response.data.success) {
                 this.setState({
@@ -65,7 +63,7 @@ export default class LoginPage extends React.Component {
       // User verfied => Land to main page.
       console.log(`User Loged In! with name: ${this.state.name} , email: ${this.state.email} and photoUrl: ${this.state.photoUrl  }`),
       //Navigate user to the Flast List for now the MainPage which is the UI component for the Flatlist.
-      <MainPage name= {this.state.name} photoUrl={this.state.photoUrl}/>
+      <MainPage URL={this.props.URL} name= {this.state.name} photoUrl={this.state.photoUrl}/>
     ) : (
       //If not veified => loginPage.
       <View>

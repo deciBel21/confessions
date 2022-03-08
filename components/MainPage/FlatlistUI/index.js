@@ -9,7 +9,6 @@ import * as Font from 'expo-font';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 
-import { IP_ADD } from '@env';
 import ConfessForm from '../../ConfessForm';
 
 //Fetch the font
@@ -41,7 +40,7 @@ const  MainPage = (props) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const getColleges = async () => {
-    axios.get(`${IP_ADD}:8080/college/colleges`)
+    axios.get(`${props.URL}/college/colleges`)
       .then((res) => {
         setColleges(res.data.colleges);
       })
@@ -49,7 +48,7 @@ const  MainPage = (props) => {
   }
 
   const getSort = async () => {
-    axios.get(`${IP_ADD}:8080/sort/sorts`)
+    axios.get(`${props.URL}/sort/sorts`)
       .then((res) => {
         setSorts(res.data.sorts);
       })
@@ -61,7 +60,7 @@ const  MainPage = (props) => {
       setisLoading(true);
       if(college === "All Colleges" ) {
         if(sort === "New Confessions"){
-          return fetch(`${IP_ADD}:8080/confession/confessions`)
+          return fetch(`${props.URL}/confession/confessions`)
           .then((response) => response.json())
           .then((responseJson) => {
             setData(responseJson.confessions.reverse())
@@ -70,7 +69,7 @@ const  MainPage = (props) => {
           .catch((e) => console.log(e))
         }
         if(sort === "Most Liked"){
-          return fetch(`${IP_ADD}:8080/confession/confessions`)
+          return fetch(`${props.URL}/confession/confessions`)
           .then((response) => response.json())
           .then(responseJson => {
             const most_liked_confessions =
@@ -84,7 +83,7 @@ const  MainPage = (props) => {
           .catch((e) => console.log(e))
       }
         if(sort === "Most Disliked"){
-          return fetch(`${IP_ADD}:8080/confession/confessions`)
+          return fetch(`${props.URL}/confession/confessions`)
           .then((response) => response.json())
           .then(responseJson => {
             const most_disliked_confessions =
@@ -100,7 +99,7 @@ const  MainPage = (props) => {
       }    
       else {
         if(sort ==='New Confessions'){
-          return fetch(`${IP_ADD}:8080/confession/confessions/${college}`)
+          return fetch(`${props.URL}/confession/confessions/${college}`)
           .then((response) => response.json())
           .then(responseJson => {
             setData(responseJson.confessions.reverse())
@@ -110,7 +109,7 @@ const  MainPage = (props) => {
         }
 
         if(sort === 'Most Liked'){
-          return fetch(`${IP_ADD}:8080/confession/confessions/${college}`)
+          return fetch(`${props.URL}/confession/confessions/${college}`)
           .then((response) => response.json())
           .then(responseJson => {
             const most_liked_confessions =
@@ -124,7 +123,7 @@ const  MainPage = (props) => {
           .catch((e) => console.log(e))
         }
         if(sort === 'Most Disliked'){
-          return fetch(`${IP_ADD}:8080/confession/confessions/${college}`)
+          return fetch(`${props.URL}/confession/confessions/${college}`)
           .then((response) => response.json())
           .then(responseJson => {
             const most_disliked_confessions =
@@ -154,7 +153,7 @@ const  MainPage = (props) => {
     const likeFound = confessionFound.likes.find(like => like.userId == userId);
     postData.disliked = false;
     postData.liked = likeFound ? false : true;
-    axios.post(`${IP_ADD}:8080/confession/like_dislike`, postData, {
+    axios.post(`${props.URL}/confession/like_dislike`, postData, {
       headers: {
         'Authorization': `Bearer ${token}`
       } 
@@ -191,7 +190,7 @@ const  MainPage = (props) => {
     const dislikeFound = confessionFound.dislikes.find(like => like.userId == userId);
     postData.liked = false;
     postData.disliked = dislikeFound ? false : true;
-    axios.post(`${IP_ADD}:8080/confession/like_dislike`, postData, {
+    axios.post(`${props.URL}/confession/like_dislike`, postData, {
       headers: {
         'Authorization': `Bearer ${token}`
       } 
@@ -224,6 +223,7 @@ const  MainPage = (props) => {
   }
   
   useEffect(() => {
+    console.log("NODE ENV:- ", __DEV__)
     setUserIdToState();
     getColleges();
     getSort();
@@ -393,7 +393,7 @@ const  MainPage = (props) => {
         decelerationRate={'normal'}
       />
     </View>
-    <ConfessForm modalVisible={modalVisible} handleModalVisibility={handleModalVisibility} />
+    <ConfessForm URL={props.URL} modalVisible={modalVisible} handleModalVisibility={handleModalVisibility} />
     <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.add}>
           <Text style={styles.addIcon}>+</Text>
         </TouchableOpacity>

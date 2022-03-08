@@ -4,16 +4,14 @@ import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-import { IP_ADD } from '@env';
-
-const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
+const ConfessForm = ({ modalVisible, handleModalVisibility, URL }) => {
     const [college, onChangeCollege] = useState("SIT");
     const [confession, onChangeConfession] = useState(null);
     const [formError, setFormError] = useState(false);
     const [colleges, setColleges] = useState([]);
 
     const getColleges = async () => {
-      axios.get(`${IP_ADD}:8080/college/colleges`)
+      axios.get(`${URL}/college/colleges`)
         .then((res) => {
           setColleges(res.data.colleges);
         })
@@ -31,7 +29,7 @@ const ConfessForm = ({ modalVisible, handleModalVisibility }) => {
         }
         const token = await SecureStore.getItemAsync('token');
         if(college && confession) {
-            axios.post(`${IP_ADD}:8080/user/confession`, data, { headers: { 'Authorization': `Bearer ${token}` } })
+            axios.post(`${URL}/user/confession`, data, { headers: { 'Authorization': `Bearer ${token}` } })
                 .then((res) => {
                     if(res.data.success) {
                         console.log(res.data.result);
