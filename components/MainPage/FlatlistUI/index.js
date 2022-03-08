@@ -240,25 +240,25 @@ const  MainPage = (props) => {
 
     // Seconds
     if(difference < 60) {
-      return difference + ' seconds ago';
+      return difference != 1 ? difference + ' seconds ago' : difference + ' second ago';
     }
     else {
       // Minutes
       const minutes = Math.floor(difference / 60);
       if(minutes < 60) {
-        return minutes + ' minutes ago';
+        return minutes != 1 ? minutes + ' minutes ago' : minutes + ' minute ago';
       }
       else {
         // Hours
         const hours = Math.floor(minutes / 60);
         if(hours < 24) {
-          return hours + ' hours ago';
+          return hours != 1 ? hours + ' hours ago' : hours + ' hour ago';
         }
         else {
           // Days
           const days = Math.floor(hours / 24);
           if(days <= 7) {
-            return days + ' days ago';
+            return days != 1 ? days + ' days ago' : days + ' day ago';
           }
           else {
             // Date, month, year
