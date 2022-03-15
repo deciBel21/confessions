@@ -20,7 +20,7 @@ export default class LoginPage extends React.Component {
      HandleClick = async() =>{
       try {
         const result = await Google.logInAsync({
-          androidClientId: "819068882370-ug04p1qchq01hsqn57q36vshm26i1doe.apps.googleusercontent.com",
+          androidClientId: "930696648655-06s4lto3e1hps4728fapcg5cnm4h9t2a.apps.googleusercontent.com",
           scopes: ["profile", "email"]
         })
         console.log("Result.user", result.user)
