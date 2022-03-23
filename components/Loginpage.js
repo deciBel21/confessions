@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View,Image, TouchableOpacity, ToastAndroid } from 'react-native';
 import * as Google from 'expo-google-app-auth';
+import * as GoogleSignIn from 'expo-google-sign-in';
 import MainPage from './MainPage/FlatlistUI';
 import React from 'react';
 import axios from 'axios';
@@ -9,51 +10,87 @@ export default class LoginPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {signedIn: false, name: "", photoUrl: "",email:""}
-    this.HandleClick=this.HandleClick.bind(this);
+    this.HandleClick = this.HandleClick.bind(this);
     this.saveToken = this.saveToken.bind(this);
+    this.initAsync = this.initAsync.bind(this);
+    // this.handleGoogleSignIn = this.handleGoogleSignIn.bind(this);
+    this.getUserDetails = this.getUserDetails.bind(this);
   }
+
+  initAsync = async () => {
+    try {
+      await GoogleSignIn.initAsync({
+        clientId: "1046990969461-46imsbn933ngi4dcbrkpmj9aneit1npm.apps.googleusercontent.com"
+      })
+    } catch (error) {
+        ToastAndroid.show(`INIT ASYNC ERROR:- ${error}`, ToastAndroid.LONG)
+        console.log("INIT ASYNC ERROR:- ", error)
+    }
+  }
+
+  getUserDetails = async () => {
+    try {
+      const user = await GoogleSignIn.signInSilentlyAsync();
+    } catch (error) {
+        console.log("Google sign in error:- ", error)
+    }
+  }
+
+  componentDidMount() {
+    this.initAsync();
+  }
+
   saveToken = async(key, value) => {
     await SecureStore.setItemAsync(key, value)
   }
 
-    //Function to handle onPress.
-     HandleClick = async() =>{
-      try {
-        const result = await Google.logInAsync({
+  //Function to handle onPress.
+  HandleClick = async () => {
+    try {
+      let result;
+      if(!__DEV__) {
+        await GoogleSignIn.askForPlayServicesAsync();
+        result = await GoogleSignIn.signInAsync();
+        console.log("Result Google", result);
+      }
+      else {
+        result = await Google.logInAsync({
           androidClientId: "930696648655-06s4lto3e1hps4728fapcg5cnm4h9t2a.apps.googleusercontent.com",
           scopes: ["profile", "email"]
         })
         console.log("Result.user", result.user)
-        if (result.type === "success") {
-          const { id, email, givenName, familyName, photoUrl, name } = result.user;
-          const data = {
-            email,
-            firstName: givenName,
-            lastName: familyName,
-            avatar: photoUrl,
-            googleId: id
-          }
-          axios.post(`${this.props.URL}/user/login`, data)
-            .then(async (response) => {
-              if(response.data.success) {
-                this.setState({
-                  signedIn: true,
-                  email:email,
-                  name: name,
-                  photoUrl: photoUrl
-                });
-
-                // Save token in local storage
-                this.saveToken("token", response.data.token);
-                this.saveToken("userId", response.data.userId);
-              }
-            })
-        } else {
-          console.log("cancelled")
-        }
-      } catch (e) {
-        console.log("error", e)
       }
+      if (result.type === "success") {
+        const { id, email, givenName, familyName, photoUrl, name } = result.user;
+        const data = {
+          email,
+          firstName: givenName,
+          lastName: familyName,
+          avatar: photoUrl,
+          googleId: id
+        }
+        axios.post(`${this.props.URL}/user/login`, data)
+          .then(async (response) => {
+            if(response.data.success) {
+              this.setState({
+                signedIn: true,
+                email:email,
+                name: name,
+                photoUrl: photoUrl
+              });
+
+              // Save token in local storage
+              this.saveToken("token", response.data.token);
+              this.saveToken("userId", response.data.userId);
+            }
+          })
+      } else {
+        console.log("cancelled")
+      }
+    } catch (e) {
+      ToastAndroid.show(`HANDLE CLICK ERROR:- ${e}`, ToastAndroid.LONG)
+      console.log("error", e)
+    }
   }
 
   render(){
