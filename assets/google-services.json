@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "154295128456",
+    "project_id": "confessions-f275d",
+    "storage_bucket": "confessions-f275d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154295128456:android:9e73f72eaecf1b0dc52a3d",
+        "android_client_info": {
+          "package_name": "com.confession.confession"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154295128456-996vo4oqf54tas7h2sddadi76520hful.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1yb8xbQp9F1Nqqte3uaM3T3s2UjMqE1w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154295128456-996vo4oqf54tas7h2sddadi76520hful.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

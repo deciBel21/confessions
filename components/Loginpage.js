@@ -5,6 +5,7 @@ import MainPage from './MainPage/FlatlistUI';
 import React from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import analytics from '@react-native-firebase/analytics';
  
 export default class LoginPage extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export default class LoginPage extends React.Component {
       await GoogleSignIn.initAsync({
         clientId: "1046990969461-46imsbn933ngi4dcbrkpmj9aneit1npm.apps.googleusercontent.com"
       })
+      // this.getUserDetails();
     } catch (error) {
         ToastAndroid.show(`INIT ASYNC ERROR:- ${error}`, ToastAndroid.LONG)
         console.log("INIT ASYNC ERROR:- ", error)
@@ -31,6 +33,9 @@ export default class LoginPage extends React.Component {
   getUserDetails = async () => {
     try {
       const user = await GoogleSignIn.signInSilentlyAsync();
+      // if(user) this.setState({
+      //   signedIn: true
+      // });
     } catch (error) {
         console.log("Google sign in error:- ", error)
     }
@@ -49,6 +54,9 @@ export default class LoginPage extends React.Component {
     try {
       let result;
       if(!__DEV__) {
+        await analytics().logLogin({
+          method: 'google'
+        })
         await GoogleSignIn.askForPlayServicesAsync();
         result = await GoogleSignIn.signInAsync();
         console.log("Result Google", result);

@@ -97,7 +97,7 @@ const ConfessForm = ({ modalVisible, handleModalVisibility, URL }) => {
                             >
                             <Text style={styles.textStyle}>Submit</Text>
                         </Pressable>
-                        <Text style={styles.note}>The confession you post remains anonymous, even to the developer.</Text>
+                        <Text style={styles.note}>The confession you post remains anonymous.</Text>
                     </View>
                 </View>
             </Modal>

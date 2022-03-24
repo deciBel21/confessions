@@ -20,12 +20,14 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./assets/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#000000"
       },
       "package": "com.confession.confession"
     },
+    "plugins": ["@react-native-firebase/app"],
     "web": {
       "favicon": "./assets/icon.png"
     }
