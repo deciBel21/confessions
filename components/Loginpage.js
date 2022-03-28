@@ -54,9 +54,9 @@ export default class LoginPage extends React.Component {
     try {
       let result;
       if(!__DEV__) {
-        await analytics().logLogin({
-          method: 'google'
-        })
+        // await analytics().logLogin({
+        //   method: 'google'
+        // })
         await GoogleSignIn.askForPlayServicesAsync();
         result = await GoogleSignIn.signInAsync();
         console.log("Result Google", result);
