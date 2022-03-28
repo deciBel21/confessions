@@ -23,7 +23,7 @@ export default class LoginPage extends React.Component {
       await GoogleSignIn.initAsync({
         clientId: "1046990969461-46imsbn933ngi4dcbrkpmj9aneit1npm.apps.googleusercontent.com"
       })
-      // this.getUserDetails();
+      this.getUserDetails();
     } catch (error) {
         ToastAndroid.show(`INIT ASYNC ERROR:- ${error}`, ToastAndroid.LONG)
         console.log("INIT ASYNC ERROR:- ", error)
@@ -33,9 +33,9 @@ export default class LoginPage extends React.Component {
   getUserDetails = async () => {
     try {
       const user = await GoogleSignIn.signInSilentlyAsync();
-      // if(user) this.setState({
-      //   signedIn: true
-      // });
+      if(user) this.setState({
+        signedIn: true
+      });
     } catch (error) {
         console.log("Google sign in error:- ", error)
     }
