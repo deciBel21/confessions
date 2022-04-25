@@ -151,11 +151,11 @@ export default class LoginPage extends React.Component {
             <TouchableOpacity
               onPress={this.HandleClick}
               style={styles.roundButton1}>
-              <Image source={require('../assets/gicon.png')}
+              <Image style={styles.siwg} source={require('../assets/siwg.png')}
               ></Image>
             </TouchableOpacity>
-            <Text onPress={this.HandleClick}
-              style={styles.loginText}>To continue, please {"signup."}</Text>
+            {/* <Text onPress={this.HandleClick}
+              style={styles.loginText}>To continue, please {"signup."}</Text> */}
             <Text style={styles.copyright}>
               © 2022 DK Tech.
             </Text>
@@ -167,6 +167,10 @@ export default class LoginPage extends React.Component {
 };
 //Styling.
 const styles = StyleSheet.create({
+  siwg: {
+    width: 282,
+    height: 70,
+  },
   introText: {
     color: 'black',
     fontSize: 38,
@@ -176,21 +180,21 @@ const styles = StyleSheet.create({
     marginStart: 20,
   },
   roundButton1: {
-    marginTop: 300,
-    width: 50,
-    height: 150,
+    marginTop: 350,
+    // width: 50,
+    // height: 150,
     alignContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
+    // padding: 20,
+    // borderRadius: 100,
   },
   loginText: {
     color: 'black',
     alignSelf: 'center',
     fontSize: 15,
     opacity: 0.4,
-    marginTop: -70,
+    marginTop: 20,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
