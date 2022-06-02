@@ -21,7 +21,7 @@
     },
     "android": {
       "config": {
-        "googleSignIn" : {
+        "googleSignIn": {
           "certificateHash": "14:05:75:F6:0F:58:D0:97:12:A0:40:E2:22:02:69:33:72:EC:0A:27"
         }
       },
@@ -29,7 +29,8 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.confession.confession"
+      "package": "com.confession.confession",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/icon.png"
